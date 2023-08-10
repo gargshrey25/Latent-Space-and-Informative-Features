@@ -1,5 +1,5 @@
 """
-@author : Shreyash Garg  Created on 02.08.2023
+@author : Shreyash Garg  Created on 05.08.2023
 Python file containing neural network
 """
 
@@ -15,11 +15,15 @@ from tensorflow.keras.models import Model
 Autoencoder section for MNIST dataset
 
 """
+"""
+Supervised Autoencoder section for MNIST dataset
+
+"""
 
 
-class Autoencoder(Model):
+class SupervisedAE(Model):
     def __init__(self):
-        super(Autoencoder, self).__init__()
+        super(SupervisedAE, self).__init__()
 
         self.encoder = tf.keras.Sequential([
             layers.Input(shape=(28, 28, 1)),
@@ -36,10 +40,15 @@ class Autoencoder(Model):
             layers.Conv2D(1, kernel_size=(3, 3),
                           activation='sigmoid', padding='same')])
 
+        self.classifier = tf.keras.Sequential([
+            layers.Flatten(),
+            layers.Dense(10, activation='softmax')])
 
     def call(self, x):
         encoded = self.encoder(x)
         decoded = self.decoder(encoded)
         return decoded
 
-
+    def classifier(self, latent):
+        classified = self.classifier(latent)
+        return classified
